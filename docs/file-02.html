@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FILE-02 • Incident Report</title>
+  <link rel="stylesheet" href="../style.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">SOLE SYSTEM</div>
+        <div class="sub">FILE-02: Incident Report</div>
+      </div>
+
+      <div class="status">
+        <a class="pill" href="index.html">← INDEX</a>
+        <a class="pill" href="../index.html">← HOME</a>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="hd">
+        <div class="label">Incident</div>
+        <div class="label">Severity: medium</div>
+      </div>
+
+      <div class="bd">
+        <dl class="kv">
+          <dt>Incident ID</dt><dd>SOLE-INC-0113</dd>
+          <dt>Timestamp</dt><dd>11-03 (no year)</dd>
+          <dt>Cause</dt><dd>unresolved</dd>
+          <dt>Affected</dt><dd>docs partition</dd>
+        </dl>
+
+        <div class="hr"></div>
+
+        <div class="small">
+          <p><strong>Report:</strong> Users attempting to open FILE-01 were redirected to a blank page. The redirect did not appear in server logs.</p>
+          <p><strong>Contradiction:</strong> The client cache indicates the redirect originated from <span style="color:rgba(169,161,255,0.95);">/archive/</span>.</p>
+          <p><strong>Recommendation:</strong> Restrict indexing. Do not list all files in the document hub.</p>
+        </div>
+
+        <!-- robots.txt -->
+      </div>
+    </div>
+
+    <div class="footer">
+      FILE VIEW • ANOMALIES MAY PRESENT AS UI ERRORS
+    </div>
+  </div>
+</body>
+</html>
