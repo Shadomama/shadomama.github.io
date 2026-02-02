@@ -1,23 +1,32 @@
 :root{
   --bg: #07090f;
-  --panel: rgba(12, 16, 26, 0.72);
-  --panel2: rgba(12, 16, 26, 0.50);
+  --panel: rgba(12, 16, 26, 0.74);
+  --panel2: rgba(12, 16, 26, 0.52);
   --line: rgba(255,255,255,0.10);
-  --text: rgba(255,255,255,0.90);
+
+  --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.62);
+
   --accent: #8df5d6;
   --accent2: #a9a1ff;
   --danger: #ff6b88;
+
   --shadow: 0 18px 60px rgba(0,0,0,0.55);
   --radius: 18px;
+
+  /* Background tuning */
+  --bg-dim: 0.55;     /* 0 = bright, 1 = very dark */
+  --bg-blur: 0px;     /* increase to 2-6px if you want dreamier */
+  --scan-opacity: 0.22;
+  --vignette-opacity: 0.55;
 }
 
-*{ box-sizing:border-box; }
+*{ box-sizing: border-box; }
 
 html, body{
-  margin:0;
-  padding:0;
-  min-height:100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
   background: var(--bg);
   color: var(--text);
   font-family: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -26,29 +35,53 @@ html, body{
 a{ color: inherit; text-decoration: none; }
 a:hover{ text-decoration: none; }
 
+p{ margin: 0; }
+
+/* =========================
+   BACKGROUND LAYER
+   ========================= */
+
 .bg{
   position: fixed;
   inset: 0;
+  z-index: -2;
+
+  /* Your image goes here */
   background:
     radial-gradient(900px 500px at 20% 18%, rgba(169,161,255,0.22), transparent 55%),
     radial-gradient(700px 500px at 78% 68%, rgba(141,245,214,0.18), transparent 58%),
-    linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.55)),
+    linear-gradient(180deg, rgba(0,0,0,var(--bg-dim)), rgba(0,0,0, calc(var(--bg-dim) + 0.15))),
     url("assets/bg.jpg");
+
   background-size: cover;
   background-position: center;
-  filter: saturate(1.1) contrast(1.05);
-  opacity: 0.95;
+  background-repeat: no-repeat;
+
+  filter: blur(var(--bg-blur)) saturate(1.1) contrast(1.05);
+  transform: scale(1.02);
+}
+
+.bg::before{
+  /* Vignette (dark edges) */
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index: -1;
+  background:
+    radial-gradient(closest-side at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,var(--vignette-opacity)) 100%);
+  pointer-events:none;
 }
 
 .bg::after{
+  /* Scanlines / subtle texture */
   content:"";
   position:absolute;
   inset:0;
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,0.03),
-      rgba(255,255,255,0.03) 1px,
+      rgba(255,255,255,var(--scan-opacity)),
+      rgba(255,255,255,var(--scan-opacity)) 1px,
       rgba(0,0,0,0) 3px,
       rgba(0,0,0,0) 6px
     );
@@ -56,6 +89,31 @@ a:hover{ text-decoration: none; }
   opacity: 0.35;
   pointer-events:none;
 }
+
+/* Optional: subtle film grain (cheap + effective) */
+@keyframes grainShift {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-1%, 1%); }
+  40% { transform: translate(1%, -1%); }
+  60% { transform: translate(-1%, -1%); }
+  80% { transform: translate(1%, 1%); }
+  100% { transform: translate(0,0); }
+}
+
+.grain{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  animation: grainShift 6s steps(6) infinite;
+}
+
+/* =========================
+   LAYOUT
+   ========================= */
 
 .wrap{
   position: relative;
@@ -93,13 +151,14 @@ a:hover{ text-decoration: none; }
 
 .brand .sub{
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 650;
 }
 
 .status{
   display:flex;
   align-items:center;
   gap: 10px;
+  flex-wrap: wrap;
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
   color: var(--muted);
@@ -128,7 +187,7 @@ a:hover{ text-decoration: none; }
   padding: 22px 18px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(12,16,26,0.72), rgba(12,16,26,0.52));
+  background: linear-gradient(180deg, rgba(12,16,26,0.74), rgba(12,16,26,0.52));
   box-shadow: var(--shadow);
   backdrop-filter: blur(12px);
 }
@@ -143,6 +202,7 @@ a:hover{ text-decoration: none; }
   margin: 0;
   color: var(--muted);
   max-width: 72ch;
+  line-height: 1.55;
 }
 
 .grid{
@@ -156,10 +216,14 @@ a:hover{ text-decoration: none; }
   .grid{ grid-template-columns: 1fr; }
 }
 
+/* =========================
+   PANELS
+   ========================= */
+
 .panel{
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(12,16,26,0.72), rgba(12,16,26,0.50));
+  background: linear-gradient(180deg, rgba(12,16,26,0.74), rgba(12,16,26,0.50));
   box-shadow: var(--shadow);
   backdrop-filter: blur(12px);
   overflow:hidden;
@@ -186,6 +250,10 @@ a:hover{ text-decoration: none; }
   padding: 14px 16px 16px;
 }
 
+/* =========================
+   DOC LIST ITEMS
+   ========================= */
+
 .list{
   display:flex;
   flex-direction: column;
@@ -210,6 +278,10 @@ a:hover{ text-decoration: none; }
   background: rgba(0,0,0,0.28);
 }
 
+.item:active{
+  transform: translateY(0px);
+}
+
 .item .meta{
   display:flex;
   flex-direction: column;
@@ -218,7 +290,7 @@ a:hover{ text-decoration: none; }
 }
 
 .item .name{
-  font-weight: 650;
+  font-weight: 700;
   font-size: 15px;
   white-space: nowrap;
   overflow:hidden;
@@ -228,6 +300,7 @@ a:hover{ text-decoration: none; }
 .item .desc{
   font-size: 13px;
   color: var(--muted);
+  line-height: 1.35;
 }
 
 .tag{
@@ -244,6 +317,10 @@ a:hover{ text-decoration: none; }
 .tag.green{ border-color: rgba(141,245,214,0.35); color: rgba(141,245,214,0.95); }
 .tag.purple{ border-color: rgba(169,161,255,0.35); color: rgba(169,161,255,0.95); }
 .tag.red{ border-color: rgba(255,107,136,0.35); color: rgba(255,107,136,0.95); }
+
+/* =========================
+   TEXT BLOCKS
+   ========================= */
 
 .small{
   font-size: 13px;
@@ -271,6 +348,12 @@ a:hover{ text-decoration: none; }
   color: rgba(255,255,255,0.82);
 }
 
+.hr{
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 14px 0;
+}
+
 .footer{
   margin-top: 18px;
   color: rgba(255,255,255,0.48);
@@ -279,8 +362,12 @@ a:hover{ text-decoration: none; }
   letter-spacing: 0.06em;
 }
 
-.hr{
-  height: 1px;
-  background: rgba(255,255,255,0.08);
-  margin: 14px 0;
+/* =========================
+   OPTIONAL: A softer look on small screens
+   ========================= */
+
+@media (max-width: 520px){
+  .hero h1{ font-size: 28px; }
+  .kv{ grid-template-columns: 1fr; }
+  .topbar{ align-items: flex-start; }
 }
