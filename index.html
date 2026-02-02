@@ -1,14 +1,118 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>SOLE Files</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SOLE File Access</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Access Which File?</h1>
-  <p>This website is run by the S.O.L.E..</p>
+  <div class="bg"></div>
 
-  <!-- nothing is missing -->
-  <!-- /archive -->
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">SOLE SYSTEM</div>
+        <div class="sub">File Access Interface</div>
+      </div>
+
+      <div class="status">
+        <div class="pill">
+          <span class="dot"></span>
+          <span>STATUS: ONLINE</span>
+        </div>
+        <div class="pill">
+          <span>SESSION: GUEST</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Choose a file.</h1>
+      <p>
+        Documents are stored by category. Some entries may appear incomplete or corrupted.
+        If you are seeing this interface, you were not the intended recipient.
+      </p>
+
+      <!-- if you're reading this: /docs/ -->
+      <!-- robots.txt is sometimes honest -->
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="hd">
+          <div class="label">Available Documents</div>
+          <div class="label">Sort: latest</div>
+        </div>
+
+        <div class="bd">
+          <div class="list">
+            <a class="item" href="docs/file-01.html">
+              <div class="meta">
+                <div class="name">FILE-01: Intake Summary</div>
+                <div class="desc">Initial record created at time of first access. Redactions present.</div>
+              </div>
+              <span class="tag green">OPEN</span>
+            </a>
+
+            <a class="item" href="docs/file-02.html">
+              <div class="meta">
+                <div class="name">FILE-02: Incident Report</div>
+                <div class="desc">Unscheduled duplication event. Notes contradict the system logs.</div>
+              </div>
+              <span class="tag purple">REVIEW</span>
+            </a>
+
+            <a class="item" href="docs/">
+              <div class="meta">
+                <div class="name">DOCUMENT INDEX</div>
+                <div class="desc">Browse all documents stored in this partition.</div>
+              </div>
+              <span class="tag">INDEX</span>
+            </a>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="small">
+            Tip: Players will inspect the source. If you want “hidden” files later, do not link them here. Only hint at paths.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="hd">
+          <div class="label">Session Details</div>
+          <div class="label">v0.1</div>
+        </div>
+
+        <div class="bd">
+          <dl class="kv">
+            <dt>User</dt><dd>GUEST</dd>
+            <dt>Access Tier</dt><dd>unverified</dd>
+            <dt>Partition</dt><dd>SOLE/PRIMARY</dd>
+            <dt>Last Sync</dt><dd>just now</dd>
+          </dl>
+
+          <div class="hr"></div>
+
+          <div class="small">
+            If you want a “login” later, we can fake it without real accounts. Just UI and a puzzle gate.
+          </div>
+
+          <!-- /archive/ -->
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      DO NOT REFRESH DURING TRANSFER • CACHE MAY RETURN INVALID RESULTS
+    </div>
+  </div>
 </body>
 </html>
