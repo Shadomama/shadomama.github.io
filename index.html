@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SOLE Files</title>
 
-  <!-- IMPORTANT: This is what you were missing -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- ABSOLUTE PATH + CACHE BUST -->
+  <link rel="stylesheet" href="/style.css?v=1" />
 
-  <!-- Fonts (optional, but makes it look way better) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-  <!-- Background layers -->
+  <!-- MUST EXIST for the background CSS to show -->
   <div class="bg"></div>
   <div class="grain"></div>
 
@@ -42,7 +43,6 @@
         Documents are stored by category. Some entries may appear incomplete or corrupted.
         If you are seeing this interface, you were not the intended recipient.
       </p>
-
       <!-- /docs/ -->
       <!-- robots.txt -->
     </div>
@@ -56,7 +56,7 @@
 
         <div class="bd">
           <div class="list">
-            <a class="item" href="docs/file-01.html">
+            <a class="item" href="/docs/file-01.html">
               <div class="meta">
                 <div class="name">FILE-01: Intake Summary</div>
                 <div class="desc">Initial record created at time of first access. Redactions present.</div>
@@ -64,7 +64,7 @@
               <span class="tag green">OPEN</span>
             </a>
 
-            <a class="item" href="docs/file-02.html">
+            <a class="item" href="/docs/file-02.html">
               <div class="meta">
                 <div class="name">FILE-02: Incident Report</div>
                 <div class="desc">Unscheduled duplication event. Notes contradict the system logs.</div>
@@ -72,7 +72,7 @@
               <span class="tag purple">REVIEW</span>
             </a>
 
-            <a class="item" href="docs/">
+            <a class="item" href="/docs/">
               <div class="meta">
                 <div class="name">DOCUMENT INDEX</div>
                 <div class="desc">Browse all documents stored in this partition.</div>
