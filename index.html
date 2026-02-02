@@ -3,16 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SOLE File Access</title>
+  <title>SOLE Files</title>
 
+  <!-- IMPORTANT: This is what you were missing -->
   <link rel="stylesheet" href="style.css" />
 
+  <!-- Fonts (optional, but makes it look way better) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="bg" id="bg"></div>
+  <!-- Background layers -->
+  <div class="bg"></div>
+  <div class="grain"></div>
 
   <div class="wrap">
     <div class="topbar">
@@ -33,14 +37,14 @@
     </div>
 
     <div class="hero">
-      <h1>Choose a file.</h1>
+      <h1>Access which file?</h1>
       <p>
         Documents are stored by category. Some entries may appear incomplete or corrupted.
         If you are seeing this interface, you were not the intended recipient.
       </p>
 
-      <!-- if you're reading this: /docs/ -->
-      <!-- robots.txt is sometimes honest -->
+      <!-- /docs/ -->
+      <!-- robots.txt -->
     </div>
 
     <div class="grid">
@@ -80,7 +84,7 @@
           <div class="hr"></div>
 
           <div class="small">
-            Tip: If you want “hidden” files later, do not link them here. Only hint at paths.
+            Tip: If you want hidden files later, don’t link them. Hint paths instead.
           </div>
         </div>
       </div>
@@ -102,7 +106,7 @@
           <div class="hr"></div>
 
           <div class="small">
-            If you want a “login” later, we can fake it without real accounts. Just UI and a puzzle gate.
+            Some files may only appear after repeated access.
           </div>
 
           <!-- /archive/ -->
@@ -114,21 +118,5 @@
       DO NOT REFRESH DURING TRANSFER • CACHE MAY RETURN INVALID RESULTS
     </div>
   </div>
-
-  <script>
-    // Background fallback: try site asset first, then fallback to GitHub "raw" if Pages is being weird.
-    (function () {
-      const bg = document.getElementById("bg");
-      const primary = "assets/bg.jpg";
-
-      // Replace OWNER/REPO below if your repo name differs.
-      const rawFallback = "https://raw.githubusercontent.com/shadomama/shadomama.github.io/main/assets/bg.jpg";
-
-      const img = new Image();
-      img.onload = () => bg.style.backgroundImage = `url("${primary}")`;
-      img.onerror = () => bg.style.backgroundImage = `url("${rawFallback}")`;
-      img.src = primary + "?v=" + Date.now(); // cache-bust
-    })();
-  </script>
 </body>
 </html>
