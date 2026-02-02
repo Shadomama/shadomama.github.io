@@ -1,0 +1,8 @@
+LOG 01
+
+They told us the duplication was a caching error.
+It wasn’t.
+
+The system began returning files that were never uploaded.
+
+Access was restricted after 11-03.
