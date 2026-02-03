@@ -5,17 +5,215 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SOLE Files</title>
 
-  <!-- ABSOLUTE PATH + CACHE BUST -->
-  <link rel="stylesheet" href="/style.css?v=1" />
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #07090f;
+      --panel: rgba(12, 16, 26, 0.74);
+      --panel2: rgba(12, 16, 26, 0.52);
+      --line: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --accent: #8df5d6;
+      --accent2: #a9a1ff;
+      --danger: #ff6b88;
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+      --radius: 18px;
+
+      --bg-dim: 0.55;
+      --bg-blur: 0px;
+      --scan-opacity: 0.22;
+      --vignette-opacity: 0.55;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{
+      margin: 0; padding: 0; min-height: 100%;
+      background: var(--bg); color: var(--text);
+      font-family: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: none; }
+    p{ margin: 0; }
+
+    .bg{
+      position: fixed; inset: 0; z-index: -2;
+      background:
+        radial-gradient(900px 500px at 20% 18%, rgba(169,161,255,0.22), transparent 55%),
+        radial-gradient(700px 500px at 78% 68%, rgba(141,245,214,0.18), transparent 58%),
+        linear-gradient(180deg, rgba(0,0,0,var(--bg-dim)), rgba(0,0,0, calc(var(--bg-dim) + 0.15))),
+        url("assets/bg.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(var(--bg-blur)) saturate(1.1) contrast(1.05);
+      transform: scale(1.02);
+    }
+    .bg::before{
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background: radial-gradient(closest-side at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,var(--vignette-opacity)) 100%);
+    }
+    .bg::after{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,var(--scan-opacity)),
+        rgba(255,255,255,var(--scan-opacity)) 1px,
+        rgba(0,0,0,0) 3px,
+        rgba(0,0,0,0) 6px
+      );
+      mix-blend-mode: overlay;
+      opacity: 0.35;
+    }
+
+    @keyframes grainShift {
+      0% { transform: translate(0,0); }
+      20% { transform: translate(-1%, 1%); }
+      40% { transform: translate(1%, -1%); }
+      60% { transform: translate(-1%, -1%); }
+      80% { transform: translate(1%, 1%); }
+      100% { transform: translate(0,0); }
+    }
+    .grain{
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      animation: grainShift 6s steps(6) infinite;
+    }
+
+    .wrap{ position: relative; max-width: 1100px; margin: 0 auto; padding: 36px 18px 64px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content: space-between; gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .brand{ display:flex; flex-direction: column; gap: 3px; }
+    .brand .title{
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-size: 12px; color: var(--muted);
+    }
+    .brand .sub{ font-size: 16px; font-weight: 650; }
+
+    .status{
+      display:flex; align-items:center; gap: 10px; flex-wrap: wrap;
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px; color: var(--muted);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.22);
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(141,245,214,0.55);
+    }
+
+    .hero{
+      margin-top: 18px; padding: 22px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(12,16,26,0.74), rgba(12,16,26,0.52));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .hero h1{ margin: 0 0 10px; font-size: 34px; letter-spacing: -0.02em; }
+    .hero p{ margin: 0; color: var(--muted); max-width: 72ch; line-height: 1.55; }
+
+    .grid{ margin-top: 16px; display:grid; grid-template-columns: 1.35fr 0.65fr; gap: 16px; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+    .panel{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(12,16,26,0.74), rgba(12,16,26,0.50));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+    .panel .hd{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display:flex; align-items:center; justify-content: space-between; gap: 10px;
+    }
+    .panel .hd .label{
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted);
+    }
+    .panel .bd{ padding: 14px 16px 16px; }
+
+    .list{ display:flex; flex-direction: column; gap: 10px; }
+    .item{
+      display:flex; align-items:flex-start; justify-content: space-between; gap: 12px;
+      padding: 12px 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      background: rgba(0,0,0,0.20);
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+    .item:hover{
+      transform: translateY(-1px);
+      border-color: rgba(141,245,214,0.35);
+      background: rgba(0,0,0,0.28);
+    }
+    .item .meta{ display:flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .item .name{ font-weight: 700; font-size: 15px; white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+    .item .desc{ font-size: 13px; color: var(--muted); line-height: 1.35; }
+
+    .tag{
+      flex:none;
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.72);
+      background: rgba(0,0,0,0.18);
+    }
+    .tag.green{ border-color: rgba(141,245,214,0.35); color: rgba(141,245,214,0.95); }
+    .tag.purple{ border-color: rgba(169,161,255,0.35); color: rgba(169,161,255,0.95); }
+
+    .small{ font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    .kv{ display:grid; grid-template-columns: 160px 1fr; gap: 8px 12px; margin: 0; }
+    .kv dt{
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.56);
+    }
+    .kv dd{ margin: 0; color: rgba(255,255,255,0.82); }
+
+    .hr{ height: 1px; background: rgba(255,255,255,0.08); margin: 14px 0; }
+
+    .footer{
+      margin-top: 18px;
+      color: rgba(255,255,255,0.48);
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px; letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 520px){
+      .hero h1{ font-size: 28px; }
+      .kv{ grid-template-columns: 1fr; }
+      .topbar{ align-items: flex-start; }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- MUST EXIST for the background CSS to show -->
   <div class="bg"></div>
   <div class="grain"></div>
 
@@ -27,13 +225,8 @@
       </div>
 
       <div class="status">
-        <div class="pill">
-          <span class="dot"></span>
-          <span>STATUS: ONLINE</span>
-        </div>
-        <div class="pill">
-          <span>SESSION: GUEST</span>
-        </div>
+        <div class="pill"><span class="dot"></span><span>STATUS: ONLINE</span></div>
+        <div class="pill"><span>SESSION: GUEST</span></div>
       </div>
     </div>
 
@@ -82,10 +275,7 @@
           </div>
 
           <div class="hr"></div>
-
-          <div class="small">
-            Tip: If you want hidden files later, don’t link them. Hint paths instead.
-          </div>
+          <div class="small">Tip: If you want hidden files later, don’t link them. Hint paths instead.</div>
         </div>
       </div>
 
@@ -104,19 +294,13 @@
           </dl>
 
           <div class="hr"></div>
-
-          <div class="small">
-            Some files may only appear after repeated access.
-          </div>
-
+          <div class="small">Some files may only appear after repeated access.</div>
           <!-- /archive/ -->
         </div>
       </div>
     </div>
 
-    <div class="footer">
-      DO NOT REFRESH DURING TRANSFER • CACHE MAY RETURN INVALID RESULTS
-    </div>
+    <div class="footer">DO NOT REFRESH DURING TRANSFER • CACHE MAY RETURN INVALID RESULTS</div>
   </div>
 </body>
 </html>
