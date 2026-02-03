@@ -2,59 +2,259 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FILE-01 • Intake Summary</title>
-  <link rel="stylesheet" href="../style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>file-01</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink: rgba(235,240,255,0.86);
+      --dim: rgba(235,240,255,0.22);
+      --line: rgba(235,240,255,0.10);
+      --panel: rgba(10,12,15,0.48);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      letter-spacing: 0.02em;
+    }
+
+    .stage{
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #000;
+    }
+
+    .bgimg{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.01);
+      filter: saturate(0.92) contrast(1.06) brightness(0.82);
+    }
+
+    @media (max-width: 768px) {
+      .bgimg{
+        object-fit: contain;
+        transform: none;
+      }
+    }
+
+    .shade{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 600px at 55% 25%, rgba(140,170,255,0.06), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.80));
+    }
+
+    .scanlines{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.04),
+        rgba(255,255,255,0.04) 1px,
+        rgba(0,0,0,0) 3px,
+        rgba(0,0,0,0) 6px
+      );
+      opacity: 0.22;
+      mix-blend-mode: overlay;
+    }
+
+    /* Document panel */
+    .wrap{
+      position: relative;
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      padding: clamp(16px, 4vw, 52px);
+      box-sizing: border-box;
+    }
+
+    .panel{
+      max-width: 860px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 18px 60px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+
+    header{
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .title{
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      color: rgba(235,240,255,0.70);
+    }
+
+    .stamp{
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+      color: var(--dim);
+      white-space: nowrap;
+    }
+
+    .content{
+      padding: 16px;
+      line-height: 1.65;
+      font-size: 13px;
+    }
+
+    .kv{
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 8px 12px;
+      padding: 12px;
+      border: 1px solid rgba(235,240,255,0.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 14px;
+    }
+
+    .k{
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 10px;
+    }
+
+    .v{
+      color: rgba(235,240,255,0.82);
+    }
+
+    .divider{
+      height: 1px;
+      background: rgba(235,240,255,0.08);
+      margin: 14px 0;
+    }
+
+    .redact{
+      color: rgba(235,240,255,0.18);
+      background: rgba(235,240,255,0.06);
+      border: 1px dashed rgba(235,240,255,0.10);
+      padding: 0 6px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .nav{
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    a{
+      color: rgba(180,220,255,0.74);
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(180,220,255,0.28);
+    }
+    a:hover{
+      color: rgba(210,235,255,0.86);
+      border-bottom-color: rgba(210,235,255,0.40);
+    }
+
+    .chip{
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,240,255,0.10);
+      background: rgba(255,255,255,0.03);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(210,230,255,0.74);
+      border-bottom: none;
+    }
+    .chip:hover{
+      border-color: rgba(210,230,255,0.22);
+      background: rgba(255,255,255,0.05);
+    }
+  </style>
 </head>
+
 <body>
-  <div class="bg"></div>
+  <div class="stage">
+    <img class="bgimg" src="../assets/bg.jpg?v=2" alt="" />
+    <div class="shade"></div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="title">SOLE SYSTEM</div>
-        <div class="sub">FILE-01: Intake Summary</div>
-      </div>
+    <div class="wrap">
+      <article class="panel" aria-label="Document file-01">
+        <header>
+          <div class="title">file-01</div>
+          <div class="stamp">visibility: low</div>
+        </header>
 
-      <div class="status">
-        <a class="pill" href="index.html">← INDEX</a>
-        <a class="pill" href="../index.html">← HOME</a>
-      </div>
-    </div>
+        <div class="content">
+          <div class="kv">
+            <div class="k">designation</div><div class="v">ENTRY / INITIAL CONTACT</div>
+            <div class="k">status</div><div class="v">RECORDED</div>
+            <div class="k">integrity</div><div class="v">DEGRADED</div>
+            <div class="k">note</div><div class="v">UNSOLICITED ARRIVAL</div>
+          </div>
 
-    <div class="panel" style="margin-top:16px;">
-      <div class="hd">
-        <div class="label">Document</div>
-        <div class="label">Classification: internal</div>
-      </div>
+          <div class="divider"></div>
 
-      <div class="bd">
-        <dl class="kv">
-          <dt>Record ID</dt><dd>SOLE-INT-0001</dd>
-          <dt>Created</dt><dd>unknown</dd>
-          <dt>Source</dt><dd>auto-ingest</dd>
-          <dt>Integrity</dt><dd>partial</dd>
-        </dl>
+          <p>
+            The system did not request a viewer.  
+            The viewer arrived anyway.
+          </p>
 
-        <div class="hr"></div>
+          <p>
+            The interface remains minimal by design.
+            Presence is acknowledged without invitation.
+          </p>
 
-        <div class="small">
-          <p><strong>Summary:</strong> A new entry appeared without a corresponding upload event. The system assigned a record ID anyway.</p>
-          <p><strong>Notes:</strong> Fields marked <span style="color:rgba(255,107,136,0.95);">[REDACTED]</span> were never populated.</p>
-          <p><strong>Observation:</strong> Some users report seeing an additional file in this directory that disappears on refresh.</p>
+          <p>
+            Some entries are missing.
+            Some entries are present but <span class="redact">UNLISTED</span>.
+          </p>
+
+          <div class="divider"></div>
+
+          <p>
+            If you are looking for navigation, you are assuming hospitality.
+            This archive does not behave like a place made for visitors.
+          </p>
+
+          <div class="nav">
+            <a class="chip" href="../index.html">return</a>
+            <a class="chip" href="../robots.txt">robots</a>
+          </div>
         </div>
-
-        <!-- try /archive/ when you’re ready -->
-      </div>
+      </article>
     </div>
 
-    <div class="footer">
-      FILE VIEW • DO NOT DISTRIBUTE
-    </div>
+    <div class="scanlines"></div>
   </div>
 </body>
 </html>
