@@ -23,9 +23,18 @@
           rgba(0,0,0,0.75)
         ),
         url("assets/bg.jpg");
-      background-size: cover;
-      background-position: center;
       background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    /* Mobile fix */
+    @media (max-width: 768px) {
+      body {
+        background-size: contain;
+        background-position: center center;
+        background-color: #000;
+      }
     }
 
     /* Optional subtle texture */
